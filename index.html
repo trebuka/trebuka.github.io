@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировщик задач</title>
+    <link rel="icon" href="img/favicon.ico" sizes="any">
+    <link rel="icon" href="img/icon.png" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body id="body">
+      <nav class="header col-12 navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
+          <a href="" class="navbar-brand"><img src="img/logo.png" alt="logo" class="img-fluid" width="35" height="35"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto ">
+              <li class="nav-item allList">
+                <a class="nav-link active me-auto" onclick="allDiv()"><img src="img/list.svg" alt="" width="25" height="25"> Все задачи <span class="notificed_allTask" id="notificed_allTask">0</span></a>
+              </li>
+              <li class="nav-item missedList">
+                <a class="nav-link" onclick="missedDiv()"><img src="img/timer-wait.svg" alt="" width="25" height="25"> Невыполненные задачи <span class="notificed_missedTask" id="notificed_missedTask">0</span></a>
+              </li>
+              <li class="nav-item doneList">
+                <a class="nav-link" onclick="completedDiv()"><img src="img/done.svg" alt="done" width="25" height="25">Выполненные задачи <span class="notificed_doneTask" id="notificed_doneTask">0</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link" data-bs-toggle="modal" data-bs-target="#createTask"><img src="img/add.svg" alt="done" width="25" height="25"> Создать задачу</a>
+              </li>
+              <li class="nav-item doneList">
+                <a class="nav-link" onclick="localStorage.clear()"><img src="img/done.svg" alt="done" width="25" height="25">очистить</a>
+              </li>
+              <li class="nav-item doneList">
+                <a class="nav-link">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked >
+                    <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+                </div>
+                </a>
+              
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск задачи" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Поиск</button>
+            </form>
+          </div>
+
+        </div>
+      </nav>  
+
+
+      <section class="all_list mt-10 mb-5" id="all_list">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 mt-3 mb-3">
+                <h1 class="text-center" id="allTaskTitle">Все задачи</h1>
+              </div>
+            </div>
+            <div class="row p-3 mb-4" id="all_task">
+
+
+
+
+
+              <div class="col-12 mb-5 mt-5 text-center" id="none">
+                <h5>Ваш список пуст</h5>
+              </div>
+
+
+
+
+
+
+
+
+
+             
+
+            </div>
+            
+          </div>
+      </section>
+
+
+
+      
+      
+      <footer class="col-12 bg-body-secondary text-center text-lg-start">
+        
+        <div class="text-center p-3">
+          © 2024 Copyright: Trebuk
+        </div>
+      </footer>
+
+      <div class="modal fade" id="editTask" tabindex="-1" aria-labelledby="editTask" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Редактировать задачу</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Заголовок</label>
+                  <input type="text" class="form-control" id="edit_title">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Описание</label>
+                  <textarea class="form-control" id="edit_description" ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Дата и время</label>
+                  <div class="d-flex">
+                  <input type="date" class="form-control" id="edit_date">
+                  <input type="time" class="form-control" id="edit_time">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+              <button type="button" class="btn btn-primary" onclick="edit_save(this)" id="edit_button" data-bs-dismiss="modal">Редактировать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="createTask" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Создать задачу</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3 text-center" id="error">
+                  <span>Заполните все поля</span>
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Заголовок</label>
+                  <input type="text" class="form-control" id="task_title">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Описание</label>
+                  <textarea class="form-control" id="task_description"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Дата и время</label>
+                  <div class="d-flex">
+                  <input type="date" class="form-control" id="task_date">
+                  <input type="time" class="form-control" id="task_time">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+              <button type="button" class="btn btn-primary" onclick="create()">Создать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

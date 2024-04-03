@@ -1,0 +1,65 @@
+body{
+    word-wrap: break-word;
+}
+footer{
+    position:fixed; 
+    bottom:0;
+}
+.header{
+    
+}
+.notificed_allTask{
+    border-radius: 20%;
+    background-color: blue;
+    color: white;
+    font-size: 11px;
+    padding: 5px;
+}
+.notificed_missedTask{
+    border-radius: 20%;
+    background-color: red;
+    color: white;
+    font-size: 13px;
+    padding: 5px;
+}
+.notificed_doneTask{
+    border-radius: 20%;
+    background-color: green;
+    color: white;
+    font-size: 13px;
+    padding: 5px;
+}
+.checkbox_task{
+    transform:scale(1.5);
+}
+
+.icons{
+  position: relative;
+}
+
+.close_button:hover,.edit_button:hover{
+    color: gray;
+    cursor: pointer;
+}
+.bordeRadius{
+    border-radius: 10px;
+}
+
+.missedList, .allList, .doneList{
+    cursor: pointer;
+}
+.missedList a:hover{
+    color: gray;
+}
+
+.missed_list, .done_list{
+    display: none;
+}
+
+#none{
+    display: none;
+}
+#error{
+    color: red;
+    display: none;
+}

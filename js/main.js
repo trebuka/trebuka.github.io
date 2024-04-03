@@ -92,9 +92,16 @@ function clean (item){
   localStorage.setItem("taskCounter", taskCounter);
   document.getElementById("notificed_allTask").innerHTML = taskCounter;
   let itemId = item.id.split("_")[1];
+
   if(!checkDate(itemId-1)){
     missedTaskCounter--;
     document.getElementById("notificed_missedTask").innerHTML = missedTaskCounter;
+  }
+
+  if(tasksArray[itemId-1].checked == "checked"){
+    checkedTaskCounter--;
+    localStorage.setItem("checkedTaskCounter", checkedTaskCounter);
+    document.getElementById("notificed_doneTask").innerHTML = checkedTaskCounter;
   }
 
   document.getElementById("item_" + itemId).remove();
@@ -286,6 +293,7 @@ function completedDiv() {
   }
 }
 
+//DarkMode
 document.addEventListener('DOMContentLoaded', (event) => {
   const htmlElement = document.documentElement;
   const switchElement = document.getElementById('darkModeSwitch');

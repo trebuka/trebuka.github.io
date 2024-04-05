@@ -336,7 +336,6 @@ function searchTasks() {
         if (taskTitle.includes(searchText) || taskDescription.includes(searchText)) {
           document.getElementById("item_" + taskId).style.display = "block";
       } else {
-          // Скрываем задачу
           document.getElementById("item_" + taskId).style.display = "none";
       }
       }

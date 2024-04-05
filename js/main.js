@@ -314,6 +314,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
   });
 });
 
+
+function searchTasks() {
+  let searchText = document.getElementById("searchInput").value.toLowerCase();
+  
+  for(let i = 0; i < taskCounter; i++){
+    let taskTitle = tasksArray[i].title.toLowerCase();
+    let taskDescription = tasksArray[i].description.toLowerCase();
+    let taskId = tasksArray[i].id;
+
+    if (taskTitle.includes(searchText) || taskDescription.includes(searchText)) {
+      // Отображаем задачу
+      document.getElementById("item_" + taskId).style.display = "block";
+  } else {
+      // Скрываем задачу
+      document.getElementById("item_" + taskId).style.display = "none";
+  }
+  }
+}
+
 if (taskCounter == null){
   taskCounter = 0;
   localStorage.setItem("taskCounter", taskCounter);

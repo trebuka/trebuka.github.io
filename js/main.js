@@ -5,6 +5,7 @@ let taskCounter = localStorage.getItem("taskCounter");
 let missedTaskCounter = 0;
 let checkedTaskCounter = localStorage.getItem("checkedTaskCounter");
 let notificed_all = document.getElementById("notificed_allTask").innerHTML;
+let pageStatus = "Все задачи";
 if (localStorage.getItem("tasksArray")) {
     tasksArray = JSON.parse(localStorage.getItem("tasksArray"));
 }
@@ -243,7 +244,8 @@ function checkControl(checkbox) {
 }
 
 function missedDiv() {
-  document.getElementById("allTaskTitle").innerHTML = "Пропущенные задачи";
+  pageStatus = "Пропущенные задачи";
+  document.getElementById("allTaskTitle").innerHTML = pageStatus;
   for (let i = 0; i <= taskNumber; i++) {
       if (document.getElementById("item_" + i) !== null) {
           document.getElementById("item_" + i).remove();
@@ -258,7 +260,8 @@ function missedDiv() {
 }
 
 function allDiv(){
-  document.getElementById("allTaskTitle").innerHTML = "Все задачи";
+  pageStatus = "Все задачи";
+  document.getElementById("allTaskTitle").innerHTML = pageStatus;
   for (let i = 0; i <= taskNumber; i++) {
       if (document.getElementById("item_" + i) !== null) {
           document.getElementById("item_" + i).remove();
@@ -279,7 +282,8 @@ function allDiv(){
 }
 
 function completedDiv() {
-  document.getElementById("allTaskTitle").innerHTML = "Выполненные задачи";
+  pageStatus = "Выполненные задачи";
+  document.getElementById("allTaskTitle").innerHTML = pageStatus;
   for (let i = 0; i <= taskNumber; i++) {
       if (document.getElementById("item_" + i) !== null) {
           document.getElementById("item_" + i).remove();
@@ -317,19 +321,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function searchTasks() {
   let searchText = document.getElementById("searchInput").value.toLowerCase();
-  
-  for(let i = 0; i < taskCounter; i++){
-    let taskTitle = tasksArray[i].title.toLowerCase();
-    let taskDescription = tasksArray[i].description.toLowerCase();
-    let taskId = tasksArray[i].id;
-
-    if (taskTitle.includes(searchText) || taskDescription.includes(searchText)) {
-      // Отображаем задачу
-      document.getElementById("item_" + taskId).style.display = "block";
-  } else {
-      // Скрываем задачу
-      document.getElementById("item_" + taskId).style.display = "none";
+  if(searchText == ""){
+    document.getElementById("allTaskTitle").innerHTML = pageStatus;
+  }else{
+    document.getElementById("allTaskTitle").innerHTML = searchText;
   }
+  for(let i = 0; i < tasksArray.length; i++){
+    if(tasksArray[i] != null){
+      let taskTitle = tasksArray[i].title.toLowerCase();
+      let taskDescription = tasksArray[i].description.toLowerCase();
+      let taskId = tasksArray[i].id;
+
+      if(document.getElementById("item_" + taskId) != null){
+        if (taskTitle.includes(searchText) || taskDescription.includes(searchText)) {
+          document.getElementById("item_" + taskId).style.display = "block";
+      } else {
+          // Скрываем задачу
+          document.getElementById("item_" + taskId).style.display = "none";
+      }
+      }
+    }
   }
 }
 

@@ -95,7 +95,7 @@
       <footer class="col-12 bg-body-secondary text-center text-lg-start">
         
         <div class="text-center p-3">
-          © 2024 Copyright: Trebuk v0.6
+          © 2024 Copyright: Trebuk v 0.7
         </div>
       </footer>
 
@@ -138,7 +138,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">Создать задачу</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close"></button>
             </div>
             <div class="modal-body">
               <form>
@@ -164,7 +164,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
-              <button type="button" class="btn btn-primary" onclick="create()">Создать</button>
+              <button type="button" class="btn btn-primary" onclick="create()" id="createTaskButton">Создать</button>
             </div>
           </div>
         </div>

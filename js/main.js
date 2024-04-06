@@ -15,6 +15,13 @@ if(checkedTaskCounter == null){
 document.getElementById("notificed_allTask").innerHTML = taskCounter;
 
 function create(){
+
+    if(document.getElementById("task_title").value == "" ||  document.getElementById("task_date").value == "" ||  document.getElementById("task_time").value == ""){
+      console.log("Заполните поля");
+      document.getElementById("error").style.display = "block";
+      
+    }else{
+      document.getElementById("error").style.display = "none";
     //Инкрементируем счетчик
     taskNumber++;
     taskCounter++;
@@ -28,6 +35,7 @@ function create(){
     let description = document.getElementById("task_description").value;
     let date = document.getElementById("task_date").value;
     let time = document.getElementById("task_time").value;
+    let completedTime = null;
     let status;
     let checked;
     var taskDateTime = new Date(date + 'T' + time);
@@ -44,17 +52,26 @@ function create(){
         "date" : date,
         "time" : time,
         "status" : status,
-        "checked" : checked
+        "checked" : checked,
+        "completedTime" : completedTime
     }
-    allTask.insertAdjacentHTML('afterBegin', htmlAdd(id, title, description, date, time, status, checked));
+    allTask.insertAdjacentHTML('afterBegin', htmlAdd(id, title, description, date, time, status, checked, completedTime));
     tasksArray.push(taskObject);
+    document.getElementById(`completedTime_${id}`).style.display = "none";
     localStorage.setItem("tasksArray", JSON.stringify(tasksArray));
     document.getElementById("notificed_missedTask").innerHTML = missed_task(id-1);
+    document.getElementById("task_title").value = "";
+    document.getElementById("task_description").value = "";
+    document.getElementById("task_date").value = "";
+    document.getElementById("task_time").value = "";
+    document.getElementById("close").click();
     
+
+    }
     
 }
 
-function htmlAdd (id, title, description, date, time, status,checked){
+function htmlAdd (id, title, description, date, time, status,checked, completedTime){
   return `<div class="col-lg-4 col-md-6 col-sm-12 mt-3" id="item_${id}">
   <div class="${status}" id="status_${id}" name="status_${id}"></div>
   <div class="task bg-body-secondary p-3 ">
@@ -83,6 +100,9 @@ function htmlAdd (id, title, description, date, time, status,checked){
     <p id="taskInfo_${id}">${description}</p>
     <span><b>Дата: </b><span id="taskDate_${id}">${date}</span></span><br>
     <span><b>Время: </b><span id="taskTime_${id}">${time}</span></span>
+    </div>
+    <div class="content_task mb-4 mt-2 border-top border-3" id="completedTime_${id}">
+    <p>Время выполнения: <span id="completedTimeSpan">${completedTime}</span></p>
     </div>
   </div>
 </div>`;
@@ -213,12 +233,18 @@ function checkControl(checkbox) {
     checkedTaskCounter++;
     taskStatus = "bg-success p-1";
     tasksArray[itemId-1].checked = "checked";
+    document.getElementById(`completedTime_${itemId}`).style.display = "block";
+    tasksArray[itemId-1].completedTime = new Date().getHours() + ":" + new Date().getMinutes() + " " + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear();
+    document.getElementById("completedTimeSpan").innerHTML = tasksArray[itemId-1].completedTime;
+    document.getElementById("completedTime")
     if(document.getElementById("allTaskTitle").innerHTML == "Пропущенные задачи"){
         document.getElementById("item_"+itemId).style.display = "none";
     }
 } else {
   checkedTaskCounter--;
   tasksArray[itemId-1].checked = null;
+  tasksArray[itemId-1].completedTime = null;
+  document.getElementById(`completedTime_${itemId}`).style.display = "none";
     if (checkDate(itemId-1)) {
         taskStatus = "bg-warning p-1";
     } else {
@@ -357,6 +383,11 @@ for (let i = 0; i <= taskNumber; i++){
     }
     document.getElementById("notificed_doneTask").innerHTML = checkedTaskCounter;
     document.getElementById("notificed_missedTask").innerHTML = missed_task(i);
-    allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked));
+    allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked, tasksArray[i].completedTime));
+    if(tasksArray[i].completedTime == null){
+      console.log(tasksArray[i].completedTime)
+      document.getElementById(`completedTime_${i+1}`).style.display = "none";
+    }
+    
   }
 }

@@ -302,7 +302,11 @@ function allDiv(){
       if(!checkDate(i)){
         tasksArray[i].status = "bg-danger p-1"
       }
-      allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked));
+      allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked, tasksArray[i].completedTime));
+      if(tasksArray[i].completedTime == null){
+      console.log(tasksArray[i].completedTime)
+      document.getElementById(`completedTime_${i+1}`).style.display = "none";
+    }
     }
   }
 }

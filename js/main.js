@@ -6,30 +6,38 @@ let missedTaskCounter = 0;
 let checkedTaskCounter = localStorage.getItem("checkedTaskCounter");
 let notificed_all = document.getElementById("notificed_allTask").innerHTML;
 let pageStatus = "Все задачи";
+
+
+
+
 if (localStorage.getItem("tasksArray")) {
     tasksArray = JSON.parse(localStorage.getItem("tasksArray"));
 }
 if(checkedTaskCounter == null){
   checkedTaskCounter = 0;
 }
+if (taskCounter == null){
+  taskCounter = 0;
+  localStorage.setItem("taskCounter", taskCounter);
+  document.getElementById("notificed_allTask").innerHTML = taskCounter;
+}
 document.getElementById("notificed_allTask").innerHTML = taskCounter;
 
-function create(){
 
+
+
+
+function create(){
     if(document.getElementById("task_title").value == "" ||  document.getElementById("task_date").value == "" ||  document.getElementById("task_time").value == ""){
       console.log("Заполните поля");
       document.getElementById("error").style.display = "block";
-      
     }else{
-      document.getElementById("error").style.display = "none";
-    //Инкрементируем счетчик
+    document.getElementById("error").style.display = "none";
     taskNumber++;
     taskCounter++;
     localStorage.setItem("taskCounter", taskCounter);
     localStorage.setItem("taskNumber", taskNumber);
     document.getElementById("notificed_allTask").innerHTML = taskCounter;
-
-    //Получаем данные задачи
     let id = taskNumber;
     let title = document.getElementById("task_title").value;
     let description = document.getElementById("task_description").value;
@@ -44,7 +52,6 @@ function create(){
     }else{
       status = "bg-warning p-1";
     }
-    //Сохранняем данные в обьект
     let taskObject = {
         "id" : id,
         "title" : title,
@@ -70,6 +77,8 @@ function create(){
     }
     
 }
+
+
 
 function htmlAdd (id, title, description, date, time, status,checked, completedTime){
   return `<div class="col-lg-4 col-md-6 col-sm-12 mt-3" id="item_${id}">
@@ -108,6 +117,8 @@ function htmlAdd (id, title, description, date, time, status,checked, completedT
 </div>`;
 }
 
+
+
 function clean (item){
   taskCounter--;
   localStorage.setItem("taskCounter", taskCounter);
@@ -128,10 +139,10 @@ function clean (item){
   document.getElementById("item_" + itemId).remove();
   tasksArray[itemId-1] = null;
   localStorage.setItem("tasksArray", JSON.stringify(tasksArray));
-  
-  console.log(tasksArray[itemId-1])
-  console.log(itemId)
+
 }
+
+
 
 function edit(item){
   let itemId = item.id.split("_")[1];
@@ -149,10 +160,9 @@ function edit(item){
   edit_description.innerHTML = description;
   edit_date.value = date;
   edit_time.value = time;
-  edit_button.value = itemId;
-
-  console.log(edit_button)
 }
+
+
 
 function edit_save (item){
   let itemId = item.value;
@@ -183,7 +193,7 @@ function edit_save (item){
   if(tasksArray[itemId-1].checked == "checked"){
     tasksArray[itemId-1].status = "bg-success p-1";
   }else{
-    if (newDateTime < new Date()) { // Если задача стала просроченной
+    if (newDateTime < new Date()) {
       tasksArray[itemId-1].status = "bg-danger p-1";
     } else {
       tasksArray[itemId-1].status = "bg-warning p-1";
@@ -198,12 +208,14 @@ function edit_save (item){
     } else {
       missedTaskCounter++;
     }
-    document.getElementById("notificed_missedTask").innerHTML = missedTaskCounter; // Обновляем отображение счетчика
+    document.getElementById("notificed_missedTask").innerHTML = missedTaskCounter;
   }
 
   document.getElementById("status_"+itemId).className = tasksArray[itemId-1].status;
   localStorage.setItem("tasksArray", JSON.stringify(tasksArray));
 }
+
+
 
 function checkDate(itemId){
   var taskDateTime = new Date(tasksArray[itemId].date + 'T' + tasksArray[itemId].time);
@@ -225,6 +237,8 @@ function missed_task(item){
     return missedTaskCounter;
 }
 
+
+
 function checkControl(checkbox) {
   let itemId = checkbox.value;
   let taskStatus = tasksArray[itemId-1].status;
@@ -236,13 +250,15 @@ function checkControl(checkbox) {
     document.getElementById(`completedTime_${itemId}`).style.display = "block";
     tasksArray[itemId-1].completedTime = new Date().getHours() + ":" + new Date().getMinutes() + " " + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear();
     document.getElementById("completedTimeSpan").innerHTML = tasksArray[itemId-1].completedTime;
-    document.getElementById("completedTime")
     if(document.getElementById("allTaskTitle").innerHTML == "Пропущенные задачи"){
         document.getElementById("item_"+itemId).style.display = "none";
     }
 } else {
   checkedTaskCounter--;
   tasksArray[itemId-1].checked = null;
+  if(document.getElementById("allTaskTitle").innerHTML == "Выполненные задачи"){
+    document.getElementById("item_"+itemId).style.display = "none";
+}
   tasksArray[itemId-1].completedTime = null;
   document.getElementById(`completedTime_${itemId}`).style.display = "none";
     if (checkDate(itemId-1)) {
@@ -261,13 +277,11 @@ function checkControl(checkbox) {
     missedTaskCounter++;
   }
   document.getElementById("notificed_missedTask").innerHTML = missedTaskCounter;
-  console.log(oldStatus)
-  console.log(checkbox.checked)
-
-  // Обновляем класс элемента задачи для отображения соответствующего статуса
   document.getElementById("status_" + itemId).className = taskStatus;
-  localStorage.setItem("tasksArray", JSON.stringify(tasksArray)); // Сохраняем изменения в localStorage
+  localStorage.setItem("tasksArray", JSON.stringify(tasksArray));
 }
+
+
 
 function missedDiv() {
   pageStatus = "Пропущенные задачи";
@@ -281,9 +295,15 @@ function missedDiv() {
   for (let i = 0; i <= taskNumber; i++) {
       if (tasksArray[i] && !checkDate(i)) {
           allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked));
+          if(tasksArray[i].completedTime == null){
+            console.log(tasksArray[i].completedTime)
+            document.getElementById(`completedTime_${i+1}`).style.display = "none";
+          }
       }
   }
 }
+
+
 
 function allDiv(){
   pageStatus = "Все задачи";
@@ -311,6 +331,8 @@ function allDiv(){
   }
 }
 
+
+
 function completedDiv() {
   pageStatus = "Выполненные задачи";
   document.getElementById("allTaskTitle").innerHTML = pageStatus;
@@ -322,17 +344,15 @@ function completedDiv() {
 
   for (let i = 0; i <= taskNumber; i++) {
       if (tasksArray[i] && tasksArray[i].checked == "checked") {
-          allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked));
+          allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked, tasksArray[i].completedTime));
       }
   }
 }
 
-//DarkMode
+
 document.addEventListener('DOMContentLoaded', (event) => {
   const htmlElement = document.documentElement;
   const switchElement = document.getElementById('darkModeSwitch');
-
-  // Set the default theme to dark if no setting is found in local storage
   const currentTheme = localStorage.getItem('bsTheme') || 'dark';
   htmlElement.setAttribute('data-bs-theme', currentTheme);
   switchElement.checked = currentTheme === 'dark';
@@ -347,6 +367,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
   });
 });
+
+
 
 
 function searchTasks() {
@@ -373,11 +395,7 @@ function searchTasks() {
   }
 }
 
-if (taskCounter == null){
-  taskCounter = 0;
-  localStorage.setItem("taskCounter", taskCounter);
-  document.getElementById("notificed_allTask").innerHTML = taskCounter;
-}
+
 for (let i = 0; i <= taskNumber; i++){
   if(tasksArray[i] == null){
 

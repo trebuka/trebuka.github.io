@@ -345,6 +345,13 @@ function completedDiv() {
   for (let i = 0; i <= taskNumber; i++) {
       if (tasksArray[i] && tasksArray[i].checked == "checked") {
           allTask.insertAdjacentHTML('afterBegin', htmlAdd(tasksArray[i].id, tasksArray[i].title, tasksArray[i].description, tasksArray[i].date, tasksArray[i].time, tasksArray[i].status, tasksArray[i].checked, tasksArray[i].completedTime));
+<<<<<<< HEAD
+=======
+          if(tasksArray[i].completedTime == null){
+      console.log(tasksArray[i].completedTime)
+      document.getElementById(`completedTime_${i+1}`).style.display = "none";
+    }
+>>>>>>> 1c7bdd731072ecfccb66db400d3e821abd819bc3
       }
   }
 }

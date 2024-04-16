@@ -249,7 +249,7 @@ function checkControl(checkbox) {
     taskStatus = "bg-success p-1";
     tasksArray[itemId-1].checked = "checked";
     document.getElementById(`completedTime_${itemId}`).style.display = "block";
-    tasksArray[itemId-1].completedTime = new Date().getHours() + ":" + new Date().getMinutes() + " " + new Date().getDate() + "-" + (new Date().getMonth()+1) + "-" + new Date().getFullYear();
+    tasksArray[itemId-1].completedTime = new Date().getHours() + ":" + new Date().getMinutes() + " " + new Date().getDate() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getFullYear();
     document.getElementById("completedTimeSpan").innerHTML = tasksArray[itemId-1].completedTime;
     if(document.getElementById("allTaskTitle").innerHTML == "Пропущенные задачи"){
         document.getElementById("item_"+itemId).style.display = "none";
